@@ -1,0 +1,72 @@
+personal_info:
+  name: Udit Bhatia
+  phone: "+91 9717228929"
+  email: bhatiaudit.work@gmail.com
+  location: Delhi, India
+  linkedin: https://linkedin.com/in/uditbhatia26
+  github: https://github.com/uditbhatia26
+
+certifications:
+  - Supervised Machine Learning: Regression and Classification
+  - Advanced Learning Algorithms
+  - Unsupervised Learning and Recommender Systems
+  - Generative AI with Large Language Models
+
+skills:
+  categories:
+    - name: Programming Languages
+      items: [Python, Java, C++, OOP]
+    - name: AI/ML Skills
+      items: [Machine Learning, Deep Learning, NLP]
+    - name: Tools & Frameworks
+      items: [Langchain, Streamlit, Ollama, CrewAI, Flask, Django, FastAPI, Zilliz, Git, TensorFlow, Numpy, Pandas, Scikit-Learn]
+
+experience:
+  - company: Supervity
+    location: Remote
+    dates: May 2025 – Present
+    title: AI Intern
+    bullet_points:
+      - Developed and deployed scalable Django APIs for document upload, collection management, and deletion using Milvus (Zilliz), forming the backbone of a custom RAG system.
+      - Built real-time Live Search and Hybrid Search features by combining vector search with external web tools like DuckDuckGo, Serper, and Bing Search API.
+      - Contributed to a Transcription API that converts voice notes and video audio into accurate text.
+      - Extracted and analyzed high-frequency user queries to uncover common intents and improve LLM response quality.
+
+  - company: Octainfinity
+    location: Remote
+    dates: Jan 2025 – Feb 2025
+    title: AI Intern
+    bullet_points:
+      - Built a job scraper using Botasaurus and automated the process with n8n, enabling real-time job data extraction.
+      - Engineered an AI-driven job application pipeline using Botasaurus, n8n, and browser automation.
+
+education:
+  - institution: Guru Gobind Singh Indraprastha University (MSIT)
+    degree: BTech in Information Technology
+    cgpa: 8.0
+    dates: 2023 – 2027
+
+extracurriculars:
+  - organization: Google Developers Group (GDG)
+    position: AIML Deputy Head
+    dates: Sep 2024 – Present
+    bullet_points:
+      - Led a team of 15 members in the AIML department, providing guidance on impactful AI/ML projects.
+      - Organized technical events and workshops during fests like Enva and Avensis.
+      - Contributed to inter-department projects like Code Cubicle and an Automatic Certificate Sender at Geek Room.
+
+projects:
+  - name: NCERT Learning Assistant
+    tech_stack: [Python, Langchain, Groq, Streamlit]
+    bullet_points:
+      - Built a Retrieval-Augmented Generation (RAG) system for question answering on NCERT PDFs.
+      - Designed a dual-themed educational and magical interface to engage students.
+      - Deployed a user-friendly Streamlit interface for PDF uploads and personalized QnA support.
+
+  - name: Postify
+    tech_stack: [Python, Langchain, Groq, Flask, N8N, CrewAI]
+    bullet_points:
+      - Developed an AI-powered platform that automates LinkedIn post creation using trending news and personal input.
+      - Integrated an LLM-based assistant to generate stylistically accurate posts.
+      - Built an editing interface with seamless auto-posting to LinkedIn.
+
