@@ -1,0 +1,48 @@
+
+Sculpt - Core Features & Functionalities
+
+1. Resume Upload & Processing
+   - Functionality: Users upload their resume during signup/login.
+   - The system extracts resume data and converts it into YAML format for structured processing.
+   - YAML enables comparison, modification, and generation of tailored resumes.
+
+2. Job Description Extraction (/api/job-description)
+   - Functionality: Extracts job description and required skills from a provided job posting URL.
+   - Uses a web loader to scrape job page content.
+   - Processes content through an LLM to identify and structure:
+       * Full Job Description (JD)
+       * Explicitly mentioned Skills
+
+3. Compatibility Analysis (/api/analyze-compatibility)
+   - Functionality: Compares the uploaded resume (YAML) with the extracted JD.
+   - Generates a Resume Match Score indicating how well the candidate fits the role.
+   - Outputs a detailed report highlighting strengths and missing skills.
+
+4. Resume Optimization (/api/optimize-resume)
+   - Functionality: Enhances the YAML resume content based on the JD.
+   - Adds or modifies bullet points to highlight relevant skills/projects.
+   - Integrates extra information provided by the user (additional projects, PORs, achievements).
+   - Generates a new optimized YAML resume.
+
+5. Resume Generation (/api/generate-resume)
+   - Functionality: Converts the optimized YAML back into a professional resume format (PDF/Doc).
+   - Applies custom formatting, consistent design, and readability.
+   - Ensures the new resume is tailored for the specific job posting.
+
+6. Resume Download & Management
+   - Functionality: Allows the user to preview, download, and manage multiple sculpted resumes.
+   - Provides version control between the original resume and newly optimized versions.
+   - Tracks usage limits (e.g., free users get 3 resume generations).
+
+7. Chrome Extension Integration
+   - Functionality: Users can extract job postings directly from portals like Internshala/LinkedIn.
+   - Offers inline actions:
+       * "Get Job Description"
+       * "Analyze Compatibility"
+       * "Generate Optimized Resume"
+   - Displays Resume Match Score and download options in real-time.
+
+8. User Account & Data Handling
+   - Functionality: Each user has an account tied to their resume (YAML) and extra details.
+   - SQL backend stores user data, resumes, and version history.
+   - Ensures data privacy and controlled access to resume generations based on plan.
