@@ -1,0 +1,24 @@
+Flask==2.3.3
+pydantic==2.5.0
+langchain-groq==0.0.1
+langchain-openai==0.0.5
+langchain-community==0.0.10
+langchain-core==0.1.0
+python-dotenv==1.0.0
+PyYAML==6.0.1
+Werkzeug==2.3.7
+python-docx==0.8.11
+docx2pdf==0.1.8
+
+# Additional dependencies you'll need for resume parsing:
+# PyPDF2==3.0.1  # For PDF parsing
+# pdfplumber==0.9.0  # Alternative PDF parsing
+# python-docx==0.8.11  # Already included above
+
+# Database dependencies (choose one):
+# SQLAlchemy==2.0.23  # For database ORM
+# psycopg2-binary==2.9.9  # For PostgreSQL
+# sqlite3  # Built-in with Python
+
+# File handling:
+# Pillow==10.1.0  # For image processing if needed
