@@ -1,16 +1,16 @@
-Flask==2.3.3
-pydantic==2.5.0
-langchain-groq==0.0.1
-langchain-openai==0.0.5
-langchain-community==0.0.10
-langchain-core==0.1.0
-python-dotenv==1.0.0
-PyYAML==6.0.1
-Werkzeug==2.3.7
-python-docx==0.8.11
-docx2pdf==0.1.8
-SQLAlchemy==2.0.23
-psycopg2-binary==2.9.9
+Flask
+pydantic
+langchain-groq
+langchain-openai
+langchain-community
+langchain-core
+python-dotenv
+PyYAML
+Werkzeug
+python-docx
+docx2pdf
+SQLAlchemy
+psycopg2-binary
 
 # Additional dependencies you'll need for resume parsing:
 # PyPDF2==3.0.1  # For PDF parsing
