@@ -9,6 +9,8 @@ PyYAML==6.0.1
 Werkzeug==2.3.7
 python-docx==0.8.11
 docx2pdf==0.1.8
+SQLAlchemy==2.0.23
+psycopg2-binary==2.9.9
 
 # Additional dependencies you'll need for resume parsing:
 # PyPDF2==3.0.1  # For PDF parsing
