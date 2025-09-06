@@ -1,16 +1,16 @@
 from flask import Flask, request, jsonify
-from pydantic import Field, BaseModel
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
+from sqlalchemy import create_engine, text
+from config import ScraperModel, CompatibilityAnalysisModel, ResumeModel
 import os
 import yaml
 import json
 from werkzeug.utils import secure_filename
 from generate_cv import McKinseyCVGenerator
-import tempfile
 import uuid
 
 app = Flask(__name__)
@@ -25,36 +25,28 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 # Create upload directory if it doesn't exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Define structured output schemas
-class ScraperModel(BaseModel):
-    job_description: str = Field(description="Extracted job description")
-    skills: list[str] = Field(description="Skills extracted for the job")
-
-class ResumeModel(BaseModel):
-    personal_info: dict = Field(description="Personal information")
-    experience: list = Field(description="Work experience")
-    education: list = Field(description="Education details")
-    skills: dict = Field(description="Skills organized by categories")
-    projects: list = Field(description="Projects")
-    certifications: list = Field(description="Certifications")
-    extracurriculars: list = Field(description="Extracurricular activities")
-
-class CompatibilityAnalysisModel(BaseModel):
-    match_score: float = Field(description="Resume match score (0-100)")
-    strengths: list[str] = Field(description="Matching strengths")
-    missing_skills: list[str] = Field(description="Missing skills")
-    recommendations: list[str] = Field(description="Improvement recommendations")
-
-# In-memory storage for demo purposes
-# TODO: Replace with proper database (SQLite/PostgreSQL)
-# Consider using SQLAlchemy with SQLite for development or PostgreSQL for production
-# You'll need to create tables for users, resumes, and resume_versions
-user_data = {}
-resume_versions = {}
+# Database configuration (PostgreSQL by default)
+DB_USER = os.getenv("POSTGRES_USER")
+DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+DB_HOST = os.getenv("POSTGRES_HOST")
+DB_PORT = os.getenv("POSTGRES_PORT")
+DB_NAME = os.getenv("POSTGRES_DB")
 
 # Load API keys from .env
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
+
+# Allow complete URL override via DATABASE_URL
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+db_engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+
+# TODO: Replace with proper database (SQLite/PostgreSQL)
+# Consider using SQLAlchemy with SQLite for development or PostgreSQL for production
+# You'll need to create tables for users, resumes, and resume_versions
+
+user_data = {}
+resume_versions = {}
 
 # Utility functions
 def allowed_file(filename):
@@ -125,6 +117,17 @@ def resume_to_yaml(resume_data):
 def home():
     return "Everything Working"
 
+@app.route("/api/db/health", methods=["GET"])
+def db_health():
+    """To check the connection with the database"""
+    try:
+        with db_engine.connect() as connection:
+            result = connection.execute(text("SELECT 1")).scalar()
+            return jsonify({"database": "ok", "result": int(result)}), 200
+    except Exception as e:
+        return jsonify({"database": "error", "detail": str(e)}), 500
+    
+
 @app.route("/api/upload-resume", methods=["POST"])
 def upload_resume():
     """
@@ -159,7 +162,7 @@ def upload_resume():
             # Store user data
             user_data[user_id] = {
                 'original_resume': yaml_data,
-                'upload_date': str(uuid.uuid4()),  # TODO: Use proper datetime
+                'upload_date': str(uuid.uuid4()),
                 'file_path': file_path
             }
             
