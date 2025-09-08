@@ -1,12 +1,9 @@
 from langchain_groq import ChatGroq
-from langchain_openai import ChatOpenAI
 from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_core.prompts import ChatPromptTemplate
 import os
-import yaml
 from dotenv import load_dotenv
 from config import system_prompt
-import datetime
 load_dotenv()
 
 os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
