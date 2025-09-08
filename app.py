@@ -2,11 +2,12 @@ from flask import Flask, request, jsonify, send_file
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from config import User, Resume, ResumeVersion
+from config import User, Resume, ResumeVersion, resume_to_yaml_system_prompt
 from generate_cv import McKinseyCVGenerator
 from werkzeug.utils import secure_filename
 import os
@@ -40,27 +41,33 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def extract_resume(file_path):
-    """Extract resume data from file (placeholder)"""
-    # TODO: Implement actual parsing
-    return {
-        'personal_info': {
-            'name': 'Sample Name',
-            'email': 'sample@email.com',
-            'phone': '+1234567890'
-        },
-        'experience': [],
-        'education': [],
-        'skills': {'categories': []},
-        'projects': [],
-        'certifications': [],
-        'extracurriculars': []
-    }
-
-def resume_to_yaml(resume_data):
+    """Extract resume data from PDF using LLM → YAML conversion"""
     try:
-        return yaml.dump(resume_data, default_flow_style=False, allow_unicode=True)
+        # Load PDF text
+        loader = PyMuPDFLoader(file_path=file_path)
+        resume_pdf = loader.load()
+
+        # Initialize LLM
+        llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
+
+        # Create prompt with your strict system instructions
+        prompt = ChatPromptTemplate(
+            [
+                ("system", resume_to_yaml_system_prompt),
+                ("human", "{resume}")
+            ]
+        )
+
+        demo_chain = prompt | llm
+
+        # Invoke chain
+        response = demo_chain.invoke(input={"resume": resume_pdf}).content
+
+        # Return raw YAML string (don’t dump again)
+        return response  
+
     except Exception as e:
-        raise ValueError(f"Failed to convert resume to YAML: {str(e)}")
+        raise ValueError(f"Failed to extract resume: {str(e)}")
 
 # -------------------------------
 # Routes
@@ -100,12 +107,20 @@ def upload_resume():
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(file_path)
 
-    resume_data = extract_resume(file_path)
-    yaml_data = resume_to_yaml(resume_data)
+    # Extract resume → YAML string
+    yaml_data = extract_resume(file_path)
+
+    # Save raw YAML string to file
+    yaml_file_path = os.path.join(
+        app.config['UPLOAD_FOLDER'],
+        f"{uuid.uuid4()}_resume.yaml"
+    )
+    with open(yaml_file_path, "w+", encoding="utf-8") as file:
+        file.write(yaml_data)
 
     new_resume = Resume(
         user_id=user_id,
-        original_resume_path=file_path,
+        original_resume_path=yaml_file_path,  # now points to YAML file
         generation_count=0
     )
     db.add(new_resume)
@@ -116,7 +131,7 @@ def upload_resume():
     return jsonify({
         "message": "Resume uploaded successfully",
         "resume_id": new_resume.id,
-        "resume_data": yaml_data
+        "resume_data": yaml_data  # return YAML string
     })
 
 # Optimize Resume

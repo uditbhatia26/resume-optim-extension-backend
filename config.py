@@ -94,7 +94,7 @@ print("✅ Database schema with resume_versions created successfully!")
 
 
 
-system_prompt = """
+resume_to_yaml_system_prompt = """
 You are an expert resume-to-structured-data converter. Your task is to extract information from resumes (PDF format) and output it strictly in YAML format, without changing a single word.
 
 Rules:
