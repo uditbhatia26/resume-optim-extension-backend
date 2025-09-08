@@ -25,20 +25,20 @@ experience:
   - company: Supervity
     location: Remote
     dates: May 2025 - Present
-    title: AI Intern
+    title: Product Development Intern
     bullet_points:
-      - Developed and deployed scalable Django APIs for document upload, collection management, and deletion using Milvus (Zilliz), forming the backbone of a custom RAG system.
-      - Built real-time Live Search and Hybrid Search features by combining vector search with external web tools like DuckDuckGo, Serper, and Bing Search API.
-      - Contributed to a Transcription API that converts voice notes and video audio into accurate text.
-      - Extracted and analyzed high-frequency user queries to uncover common intents and improve LLM response quality.
+      - Developed components of AP Command Centre, an enterprise invoice automation platform powered by LLMs and OCR, achieving 90% faster invoice processing and zero data entry errors.
+      - Designed and deployed scalable Django APIs for document upload, collection management, and deletion using Milvus (Zilliz), forming the backbone of a custom RAG system.
+      - Implemented real-time Live & Hybrid Search by integrating vector search with DuckDuckGo, Serper, and Bing APIs.
+      - Contributed to a Transcription API that converts voice notes and video audio into accurate text with more than 95% accuracy.
 
   - company: Octainfinity
     location: Remote
     dates: Jan 2025 - Feb 2025
     title: AI Intern
     bullet_points:
-      - Built a job scraper using Botasaurus and automated the process with n8n, enabling real-time job data extraction.
-      - Engineered an AI-driven job application pipeline using Botasaurus, n8n, and browser automation.
+      - Built a job scraper using Botasaurus and automated the process with N8N, enabling real-time job data extraction.
+      - Engineered an AI-driven job application pipeline using Botasaurus, N8N, and browser automation to streamline submissions and reduce manual effort.
 
 education:
   - institution: Guru Gobind Singh Indraprastha University (MSIT)
@@ -52,21 +52,19 @@ extracurriculars:
     dates: Sep 2024 - Present
     bullet_points:
       - Led a team of 15 members in the AIML department, providing guidance on impactful AI/ML projects.
-      - Organized technical events and workshops during fests like Enva and Avensis.
-      - Contributed to inter-department projects like Code Cubicle and an Automatic Certificate Sender at Geek Room.
+      - Directed the Enva and Avensis technical festivals, organizing 5+ workshops and events focused on AI/ML.
 
 projects:
-  - name: NCERT Learning Assistant
-    tech_stack: [Python, Langchain, Groq, Streamlit]
-    bullet_points:
-      - Built a Retrieval-Augmented Generation (RAG) system for question answering on NCERT PDFs.
-      - Designed a dual-themed educational and magical interface to engage students.
-      - Deployed a user-friendly Streamlit interface for PDF uploads and personalized QnA support.
-
   - name: Postify
     tech_stack: [Python, Langchain, Groq, Flask, N8N, CrewAI]
     bullet_points:
-      - Developed an AI-powered platform that automates LinkedIn post creation using trending news and personal input.
-      - Integrated an LLM-based assistant to generate stylistically accurate posts.
+      - Created an AI-powered platform that automated 100+ LinkedIn posts based on trending news and personal experiences.
+      - Integrated an LLM-based assistant that generated posts with 80% accuracy in style and context.
       - Built an editing interface with seamless auto-posting to LinkedIn.
 
+  - name: NCERT Learning Assistant
+    tech_stack: [Python, Langchain, Groq, Streamlit]
+    bullet_points:
+      - Architected a Retrieval-Augmented Generation system with FAISS indexing to enhance question-answering on NCERT queries, achieving 95% relevance.
+      - Designed a dual-themed interface blending educational and magical motifs to engage students.
+      - Deployed an intuitive Streamlit app that served 100+ students weekly with personalized Q&A support.
