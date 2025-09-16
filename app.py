@@ -199,65 +199,65 @@ def analyze_compatibility():
         return jsonify({"error": "Missing required fields"}), 400
 
     db = SessionLocal()
-    try:
-        resume = db.query(Resume).filter_by(id=resume_id, user_id=user_id).first()
-        if not resume:
-            return jsonify({"error": "Resume not found"}), 404
+    # try:
+    #     resume = db.query(Resume).filter_by(id=resume_id, user_id=user_id).first()
+    #     if not resume:
+    #         return jsonify({"error": "Resume not found"}), 404
 
-        try:
-            with open(resume.original_resume_path, "r", encoding="utf-8") as f:
-                resume_data = yaml.safe_load(f)
-        except Exception as e:
-            return jsonify({"error": f"Failed to load resume YAML: {str(e)}"}), 500
+    #     try:
+    #         with open(resume.original_resume_path, "r", encoding="utf-8") as f:
+    #             resume_data = yaml.safe_load(f)
+    #     except Exception as e:
+    #         return jsonify({"error": f"Failed to load resume YAML: {str(e)}"}), 500
 
         # Build analysis prompt (explicit)
-        system_text = (
-            "You are a career assistant. Given a resume (YAML) and a job description, "
-            "provide a match score (0-100) indicating how well the resume fits the job. "
-            "Return only the number (integer)."
-        )
-        human_text = (
-            "Resume (YAML):\n"
-            f"{yaml.dump(resume_data, default_flow_style=False, allow_unicode=True)}\n\n"
-            "Job Description:\n"
-            f"{job_description}\n\n"
-            "Instructions: Output ONLY the integer score between 0 and 100 (no extra text)."
-        )
+    #     system_text = (
+    #         "You are a career assistant. Given a resume (YAML) and a job description, "
+    #         "provide a match score (0-100) indicating how well the resume fits the job. "
+    #         "Return only the number (integer)."
+    #     )
+    #     human_text = (
+    #         "Resume (YAML):\n"
+    #         f"{yaml.dump(resume_data, default_flow_style=False, allow_unicode=True)}\n\n"
+    #         "Job Description:\n"
+    #         f"{job_description}\n\n"
+    #         "Instructions: Output ONLY the integer score between 0 and 100 (no extra text)."
+    #     )
 
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", system_text),
-            ("human", human_text),
-        ])
-        chain = prompt | llm
+    #     prompt = ChatPromptTemplate.from_messages([
+    #         ("system", system_text),
+    #         ("human", human_text),
+    #     ])
+    #     chain = prompt | llm
 
-        # Invoke
-        response = chain.invoke({})
-        raw = response.content.strip()
+    #     # Invoke
+    #     response = chain.invoke({})
+    #     raw = response.content.strip()
 
-        # Extract integer robustly (first integer 0-100)
-        # Accept formats like "85", "Match Score: 85", "85/100"
-        match = re.search(r"(\b100\b|\b\d{1,2}\b)", raw)
-        if not match:
-            return jsonify({"error": f"LLM returned unparseable score: {raw}"}), 500
+    #     # Extract integer robustly (first integer 0-100)
+    #     # Accept formats like "85", "Match Score: 85", "85/100"
+    #     match = re.search(r"(\b100\b|\b\d{1,2}\b)", raw)
+    #     if not match:
+    #         return jsonify({"error": f"LLM returned unparseable score: {raw}"}), 500
 
-        try:
-            score = int(match.group(1))
-        except Exception:
-            return jsonify({"error": f"Failed to parse score: {raw}"}), 500
+    #     try:
+    #         score = int(match.group(1))
+    #     except Exception:
+    #         return jsonify({"error": f"Failed to parse score: {raw}"}), 500
 
-        # Clamp to 0-100
-        score = max(0, min(100, score))
+    #     # Clamp to 0-100
+    #     score = max(0, min(100, score))
 
-        return jsonify({
-            "resume_id": resume_id,
-            "job_description": job_description,
-            "match_score": score
-        })
+    #     return jsonify({
+    #         "resume_id": resume_id,
+    #         "job_description": job_description,
+    #         "match_score": score
+    #     })
 
-    except Exception as e:
-        return jsonify({"error": f"Analysis failed: {str(e)}"}), 500
-    finally:
-        db.close()
+    # except Exception as e:
+    #     return jsonify({"error": f"Analysis failed: {str(e)}"}), 500
+    # finally:
+    #     db.close()
 
 # -----------------------
 # Optimize Resume
