@@ -50,16 +50,19 @@ engine = create_engine(DATABASE_URL, echo=True)  # echo=True prints SQL logs
 Base = declarative_base()
 # Users table
 class User(Base):
+    __tablename__ = "users"   # required!
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
-    generated_count = Column(Integer, default=0)   # ✅ same as before
-    addons = Column(JSON, nullable=True)           # ✅ new field
+    generated_count = Column(Integer, default=0)
+    addons = Column(JSON, nullable=True)
+
+    # 🔑 This relationship is MISSING in your code
+    resumes = relationship("Resume", back_populates="user", cascade="all, delete")
 
 
-
-# Resumes table
 class Resume(Base):
     __tablename__ = "resumes"
 
@@ -68,23 +71,21 @@ class Resume(Base):
     original_resume_path = Column(String(255), nullable=False)
     generation_count = Column(Integer, default=0)
 
-    # Relationship back to user
     user = relationship("User", back_populates="resumes")
-    # One-to-many relationship (Resume -> ResumeVersions)
     versions = relationship("ResumeVersion", back_populates="resume", cascade="all, delete")
 
-# Resume Versions table
+
 class ResumeVersion(Base):
     __tablename__ = "resume_versions"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     resume_id = Column(Integer, ForeignKey("resumes.id", ondelete="CASCADE"), nullable=False)
     optimized_resume_path = Column(String(255), nullable=False)
-    job_description = Column(String(1000), nullable=True)  # Optional: store the job description or ID
+    job_description = Column(String(1000), nullable=True)
     version_number = Column(Integer, nullable=False)
 
-    # Relationship back to resume
     resume = relationship("Resume", back_populates="versions")
+
 
 # Create all tables
 Base.metadata.create_all(engine)
